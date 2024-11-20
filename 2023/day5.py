@@ -1,7 +1,6 @@
 from typing import Tuple
-from tqdm import tqdm
 
-data = open("data/day5.txt").read().split("\n\n")
+data = open("data/day5t.txt").read().split("\n\n")
 
 
 def parser() -> Tuple[list, list]:
@@ -16,35 +15,86 @@ def parser() -> Tuple[list, list]:
 
 
 seeds, parsed_data = parser()
+parsed_data = parsed_data[:]
+
+print(f"{seeds=}")
+for row in parsed_data:
+    print(row)
+
+
+# def recursive_solve(depth, source, destination, length):
+#     print("debug", depth, source, destination, length)
+#     out = []
+#     end_source = source + length
+#     if depth >= len(parsed_data):
+#         return [source, destination, length]
+# 
+#     for p_source, p_destination, p_length in parsed_data[depth]:
+#         print("checking", [p_source, p_destination, p_length])
+#         p_end_source = p_source + p_length
+# 
+#         if p_source <= source and end_source <= p_end_source:
+#             print("trigger 1")
+#             # Condition 1: Entire segment fits within p_source to p_end_source.
+#             return [recursive_solve(depth + 1, source, p_destination, length)]
+# 
+#         elif p_source < end_source <= p_end_source:
+#             # Condition 2: Segment partially outside at the start.
+#             outside = p_source - source
+#             print("trigger 2", outside)
+#             return [
+#                 recursive_solve(depth, source, destination, outside),
+#                 recursive_solve(depth + 1, p_source, p_destination, length - outside)
+#             ]
+# 
+#         elif p_source <= source <= p_end_source:
+#             # Condition 3: Segment partially outside at the end.
+#             inside = source - p_end_source
+#             print("trigger 3", f"{inside=} {length=}, {source=}, {p_end_source=}")
+#             return [
+#                 recursive_solve(depth + 1, source, p_destination, inside),
+#                 recursive_solve(depth, source, p_destination, length - inside)
+#             ]
+#         print("trigger pass")
+# 
+#     return [source, destination, length]
+def recursive_solve(depth, source, destination, length):
+    print("debug", depth, source, destination, length)
+    end_source = source + length
+    if depth >= len(parsed_data):  # Base case: stop recursion if depth exceeds data length
+        return [source, destination, length]
+
+    for p_source, p_destination, p_length in parsed_data[depth]:
+        print("checking", [p_source, p_destination, p_length])
+        p_end_source = p_source + p_length
+
+        if p_source <= source and end_source <= p_end_source:
+            print("trigger 1")  # Entire segment is contained
+            return [recursive_solve(depth + 1, source, p_destination, length)]
+
+        elif source < p_source < end_source <= p_end_source:
+            print("trigger 2")  # Partially outside at the start
+            outside = p_source - source
+            return [
+                recursive_solve(depth, source, destination, outside),
+                recursive_solve(depth + 1, p_source, p_destination, length - outside)
+            ]
+
+        elif p_source <= source < p_end_source < end_source:
+            print("trigger 3")  # Partially outside at the end
+            inside = p_end_source - source
+            return [
+                recursive_solve(depth + 1, source, p_destination, inside),
+                recursive_solve(depth, p_end_source, destination, length - inside)
+            ]
+
+        print("trigger pass")  # Debug when no condition matches
+
+    return recursive_solve(depth + 1, source, destination, length)
+
+
+for i in range(0, len(seeds), 2):
+    print()
+    print("Starting sequence")
+    print('solve', recursive_solve(0, seeds[i], seeds[i], seeds[i + 1]))
     
-
-def fast_converter(data_index: int, seed: int) -> int:
-    for d_range, s_range, length in parsed_data[data_index]:
-        if seed in range(s_range, s_range + length):
-            return seed + (d_range - s_range)
-    return seed
-
-
-def calculate_location(seed: int) -> int:
-    out = seed
-    for i in range(len(parsed_data)):
-        out = fast_converter(i, out)
-    return out
-        
-
-def calculate_lowest_location() -> int:
-    return min([calculate_location(seed) for seed in seeds])
-
-
-def calculate_lowest_range_location() -> int:
-    out = calculate_location(seeds[0])
-    for i in range(0, len(seeds), 2):
-        for seed in tqdm(range(seeds[i], seeds[i] + seeds[i + 1])):
-            location = calculate_location(seed)
-            if location < out:
-                out = location
-    return out
-
-    
-print(f"Part 1: {calculate_lowest_location()}")
-print(f"Part 2: {calculate_lowest_range_location()}")
