@@ -1,7 +1,7 @@
 import re
 from collections import defaultdict
 
-data = open("day4.txt").read().splitlines()
+data = open("data/day4.txt").read().splitlines()
 
 
 def calculate_score():

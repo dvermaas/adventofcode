@@ -1,7 +1,9 @@
-data = open("day5.txt").read().splitlines()
+from typing import Tuple
+
+data = open("data/day5.txt").read().splitlines()
 
 
-def parser() -> list:
+def parser() -> Tuple[list, list]:
     out = []
     sub_out = []
     for line in data:
@@ -10,43 +12,42 @@ def parser() -> list:
         else:
             out.append(sub_out)
             sub_out = []
+    out.append(sub_out)
     out[0] = out[0][0].split(": ")
     out = [
         [list(map(int, line.split(" "))) for line in group[1:]]
         for group in out
     ]
-    out[0] = out[0][0]
-    return out
+    return out[0][0], out[1:]
 
 
-parsed_data = parser()
-
-
-def data_hasher(data_index: int) -> dict:
-    hashmap = {}
-    for d_range, s_range, length in parsed_data[data_index]:
-        for i in range(length):
-            hashmap[s_range + i] = d_range + i
-    return hashmap
-
-
-hash_dict = [data_hasher(i) for i in range(1, len(parsed_data))]
-
-
-def data_farmer(seed: int) -> int:
-    out = seed
-    for i in range(len(hash_dict)):
-        if out in hash_dict[i]:
-            out = hash_dict[i][out]
-    return out
+seeds, parsed_data = parser()
+for row in parsed_data:
+    print(row)
     
+    
+def fast_converter(data_index: int, seed: int) -> int:
+    for d_range, s_range, length in parsed_data[data_index]:
+        if seed in range(s_range, s_range + length):
+            return seed + (d_range - s_range)
+    return seed
+
+
+print(fast_converter(0, 79))
+
+
+def calculate_location(seed: int) -> int:
+    debug = [seed]
+    out = seed
+    for i in range(len(parsed_data)):
+        out = fast_converter(i, out)
+        debug.append(out)
+    print('debug', debug)
+    return out
+        
 
 def calculate_lowest_location():
-    return min([data_farmer(seed) for seed in parsed_data[0]])
+    return min([calculate_location(seed) for seed in seeds])
     
     
 print(f"Part 1: {calculate_lowest_location()}")
-# print(data_farmer(79))
-# print(data_farmer(14))
-# print(data_farmer(55))
-# print(data_farmer(13))

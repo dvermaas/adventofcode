@@ -1,6 +1,6 @@
 from collections import defaultdict
 
-data = open("day2.txt").read().splitlines()
+data = open("data/day2.txt").read().splitlines()
 rgb_total = {"red": 12, "green": 13, "blue": 14}
 
 

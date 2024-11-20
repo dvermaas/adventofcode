@@ -1,4 +1,4 @@
-data = open("day1.txt").read().splitlines()
+data = open("data/day1.txt").read().splitlines()
 
 
 numbers = ["one", "two", "three", "four", "five",

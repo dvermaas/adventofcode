@@ -2,7 +2,7 @@ import math
 from collections import defaultdict
 from typing import Optional
 
-data = open("day3.txt").read().splitlines()
+data = open("data/day3.txt").read().splitlines()
 
 
 def is_special_char_around(y, sx, x) -> bool:
