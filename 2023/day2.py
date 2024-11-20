@@ -4,7 +4,7 @@ data = open("day2.txt").read().splitlines()
 rgb_total = {"red": 12, "green": 13, "blue": 14}
 
 
-def is_game_valid(game, rgb_limit: dict):
+def is_game_valid(game, rgb_limit: dict) -> bool:
     _, game_data = game.split(":")
     for sub_game in game_data.split(";"):
         for cube_data in sub_game.split(","):
@@ -22,7 +22,7 @@ def valid_game_parser(games: list, rgb_limit: dict) -> int:
     return out
 
 
-def minimal_games(games: list):
+def minimal_games(games: list) -> int:
     out = 0
     for i, game in enumerate(games, 1):
         _, game_data = game.split(":")
