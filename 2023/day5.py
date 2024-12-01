@@ -33,12 +33,10 @@ def recursive_solve(depth, destination, source, length):
     results = []  # Store results of recursive calls
 
     for p_destination, p_source, p_length in parsed_data[depth]:
-        p_end_source = p_destination + p_length
+        p_end_source = p_source + p_length
         shift = p_destination - p_source
-
-        # everything is inside range
-        print('tts', p_source <= source, p_source, source)
-        if p_destination <= source and end_source <= p_end_source:
+        print('tts', p_source <= source, p_source, source, end_source <= p_end_source, end_source, p_end_source)
+        if p_source <= source and end_source <= p_end_source:
             print(f"trigger 1 {shift=}, {[p_destination, p_source, p_length]}")
             results.extend(recursive_solve(depth + 1, destination + shift, source, length))
             break
