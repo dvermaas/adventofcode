@@ -1,7 +1,10 @@
+from aocd import get_data
+
 STACKS_WIDTH = 9
 STACKS_HEIGHT = 9
 STACK_STATE = [[] for _ in range(STACKS_WIDTH)]
-containers = open("input.txt").read().splitlines()
+
+containers = get_data(day=5, year=2022).splitlines()
 
 for offset in range(1, STACKS_HEIGHT):
     state = [containers[STACKS_HEIGHT-offset-1][i:i+1] for i in range(1, 4 * STACKS_WIDTH, 4)]

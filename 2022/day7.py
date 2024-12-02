@@ -1,3 +1,6 @@
+from aocd import get_data
+
+
 class Folder:
     def __init__(self, name: str, parent):
         self.name = name
@@ -57,7 +60,7 @@ def recursive_find(folder: Folder) -> dict:
     return sizes_dict
 
 
-commands = open("input.txt").read().splitlines()
+commands = get_data(day=7, year=2022).splitlines()
 file_system = build_filesystem(commands)
 print(f"Part 1: {sum({folder: size for folder, size in recursive_find(file_system).items() if 100000 > size}.values())}")
 

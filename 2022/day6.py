@@ -1,4 +1,6 @@
-coms = open("input.txt").read()
+from aocd import get_data
+
+coms = get_data(day=6, year=2022)
 
 
 def find_marker(data: str, window_size: int) -> int:

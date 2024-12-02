@@ -1,4 +1,6 @@
-strategies = open("input.txt").read().splitlines()
+from aocd import get_data
+
+strategies = get_data(day=2, year=2022).splitlines()
 
 shape_value = {"X": 1, "Y": 2, "Z": 3}
 victory_value = {

@@ -1,4 +1,6 @@
-backpack_list = open("input.txt").read().splitlines()
+from aocd import get_data
+
+backpack_list = get_data(day=3, year=2022).splitlines()
 
 
 def priority(letter):

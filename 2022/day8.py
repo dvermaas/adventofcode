@@ -1,3 +1,6 @@
+from aocd import get_data
+
+
 def is_visible(forest_data: list, i: int, j: int) -> bool:
     height = forest_data[i][j]
     forest_hor = forest_data[i]
@@ -19,7 +22,7 @@ def calculate_total_visible(forest_data: list):
     return total_visible + border_trees
 
 
-forest_data = open("input.txt").read().splitlines()
+forest_data = get_data(day=8, year=2022).splitlines()
 print(f"Part 1: {calculate_total_visible(forest_data)}")
 
 

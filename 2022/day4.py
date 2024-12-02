@@ -1,4 +1,8 @@
-sections = open("input.txt").read().splitlines()
+from aocd import get_data
+
+sections = get_data(day=4, year=2022).splitlines()
+
+
 parsed_sections = []
 for section in sections:
     elf0 = list(map(int, section.split(",")[0].split("-")))
