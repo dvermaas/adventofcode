@@ -1,4 +1,5 @@
 from typing import List
+from aocd import get_data
 
 
 def parse(puzzle_input: List[str]) -> List[List[int]]:
@@ -22,6 +23,6 @@ def report_calculator(puzzle_input: List[List[int]], dampener=0) -> int:
     return sum([is_save(line, dampener) for line in puzzle_input])
         
 
-data = parse(open("data/day2.txt").read().splitlines())
+data = parse(get_data(day=2, year=2024).splitlines())
 print(f"Part 1: {report_calculator(data)}")
 print(f"Part 2: {report_calculator(data, dampener=1)}")

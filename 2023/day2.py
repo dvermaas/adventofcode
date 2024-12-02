@@ -1,6 +1,7 @@
 from collections import defaultdict
+from aocd import get_data
 
-data = open("data/day2.txt").read().splitlines()
+data = get_data(day=2, year=2023).splitlines()
 rgb_total = {"red": 12, "green": 13, "blue": 14}
 
 

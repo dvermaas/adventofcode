@@ -1,8 +1,9 @@
 import math
 from collections import defaultdict
 from typing import Optional
+from aocd import get_data
 
-data = open("data/day3.txt").read().splitlines()
+data = get_data(day=3, year=2023).splitlines()
 
 
 def is_special_char_around(y, sx, x) -> bool:

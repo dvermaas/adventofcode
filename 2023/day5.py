@@ -1,6 +1,7 @@
 from typing import Tuple
+from aocd import get_data
 
-data = open("data/day5t.txt").read().split("\n\n")
+data = get_data(day=5, year=2023).split("\n\n")
 
 
 def parser() -> Tuple[list, list]:
@@ -15,50 +16,35 @@ def parser() -> Tuple[list, list]:
 
 
 seeds, parsed_data = parser()
-parsed_data = parsed_data[:]
-
-print(f"{seeds=}")
-for row in parsed_data:
-    print(row)
 
 
-def recursive_solve(depth, destination, source, length):
-    print("debug", depth, [destination, source, length])
-    end_source = source + length
-
-    # Base case: If we reach the maximum depth, return the destination
-    if depth >= len(parsed_data):
-        return [destination]
-
-    results = []  # Store results of recursive calls
-
-    for p_destination, p_source, p_length in parsed_data[depth]:
-        p_end_source = p_source + p_length
-        shift = p_destination - p_source
-        print('tts', p_source <= source, p_source, source, end_source <= p_end_source, end_source, p_end_source)
-        if p_source <= source and end_source <= p_end_source:
-            print(f"trigger 1 {shift=}, {[p_destination, p_source, p_length]}")
-            results.extend(recursive_solve(depth + 1, destination + shift, source, length))
-            break
-        elif source < p_destination < end_source <= p_end_source:
-            print("trigger 2")  # Partially outside at the start
-            outside = p_destination - source
-            results.extend(recursive_solve(depth, destination, source, outside))
-            results.extend(recursive_solve(depth + 1, p_destination, p_source, length - outside))
-            break
-        elif p_destination <= source < p_end_source < end_source:
-            print("trigger 3")  # Partially outside at the end
-            inside = p_end_source - source
-            results.extend(recursive_solve(depth + 1, source, p_source, inside))
-            results.extend(recursive_solve(depth, destination, p_end_source, length - inside))
-            break
-    if not results:
-        results.extend(recursive_solve(depth + 1, destination,source , length))
-    return results
+def fast_converter(data_index: int, seed: int) -> int:
+    for d_range, s_range, length in parsed_data[data_index]:
+        if seed in range(s_range, s_range + length):
+            return seed + (d_range - s_range)
+    return seed
 
 
-for i in range(0, len(seeds), 2):
-    print()
-    print("Starting sequence")
-    print('solve', min(recursive_solve(0, seeds[i], seeds[i], seeds[i + 1])))
-    
+def calculate_location(seed: int) -> int:
+    out = seed
+    for i in range(len(parsed_data)):
+        out = fast_converter(i, out)
+    return out
+
+
+def calculate_lowest_location() -> int:
+    return min([calculate_location(seed) for seed in seeds])
+
+
+def calculate_lowest_range_location() -> int:
+    out = calculate_location(seeds[0])
+    for i in range(0, len(seeds), 2):
+        for seed in range(seeds[i], seeds[i] + seeds[i + 1]):
+            location = calculate_location(seed)
+            if location < out:
+                out = location
+    return out
+
+
+print(f"Part 1: {calculate_lowest_location()}")
+# print(f"Part 2: {calculate_lowest_range_location()}")

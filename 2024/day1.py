@@ -1,5 +1,6 @@
 from typing import List, Tuple
 from collections import Counter
+from aocd import get_data
 
 
 def parse(puzzle_input: List[str]) -> Tuple[List[int], List[int]]:
@@ -28,6 +29,6 @@ def part2(left: List[int], right: List[int]) -> int:
     return out
     
     
-left_data, right_data = parse(open("data/day1.txt").read().splitlines())
+left_data, right_data = parse(get_data(day=1, year=2024).splitlines())
 print(f"Part 1: {part1(left_data, right_data)}")
 print(f"Part 2: {part2(left_data, right_data)}")

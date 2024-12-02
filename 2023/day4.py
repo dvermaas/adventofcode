@@ -1,7 +1,8 @@
 import re
 from collections import defaultdict
+from aocd import get_data
 
-data = open("data/day4.txt").read().splitlines()
+data = get_data(day=4, year=2023).splitlines()
 
 
 def calculate_score():

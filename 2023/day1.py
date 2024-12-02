@@ -1,4 +1,6 @@
-data = open("data/day1.txt").read().splitlines()
+from aocd import get_data
+
+data = get_data(day=1, year=2023).splitlines()
 
 
 numbers = ["one", "two", "three", "four", "five",
