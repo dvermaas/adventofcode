@@ -61,9 +61,5 @@ def part_2(puzzle_data: str) -> int:
     return out
 
 
-# 108827062 is too high
-# 78567818 is incorrect
-# 77055967 was correct
-# 67904534 is too low
 print(f"Part 1: {part_1(data)}")
 print(f"Part 2: {part_2(data)}")
