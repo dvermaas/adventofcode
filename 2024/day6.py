@@ -1,11 +1,9 @@
 import copy
 import sys
-import time
 from typing import List, Tuple
 
 from aocd import get_data
 
-# data = [list(line) for line in open("day6.txt").read().splitlines()]
 data = [list(line) for line in get_data(day=6, year=2024).splitlines()]
 
 # the default recursion limit of 1000 will kill the move_guard() function before it is done
@@ -20,12 +18,7 @@ def find_guard(puzzle_input: List[List[str]]) -> Tuple[int, int]:
                 return y, x
 
 
-def print_puzzle(puzzle_input: List[List[str]]):
-    for line in puzzle_input:
-        print("".join(line))
-
-
-def move_guard(puzzle_input: List[List[str]], guard_location: Tuple[int, int]):
+def move_guard(puzzle_input: List[List[str]], guard_location: Tuple[int, int]) -> List[List[str]]:
     guard = ("^", ">", "v", "<")
     offsets = ((-1, 0), (0, 1), (1, 0), (0, -1))
     y, x = guard_location
@@ -56,7 +49,7 @@ def part_2(puzzle_input: List[List[str]]) -> int:
     guard_location = find_guard(puzzle_input)
     for y, line in enumerate(puzzle_input):
         for x, item in enumerate(line):
-            if item == "#" or (y, x) == guard_location:
+            if item != "X":
                 continue
             puzzle_input[y][x] = "#"
             tmp = copy.deepcopy(puzzle_input)
@@ -70,6 +63,7 @@ def part_2(puzzle_input: List[List[str]]) -> int:
 
 solved_puzzle = move_guard(copy.deepcopy(data), find_guard(data))
 print("part 1:", part_1(solved_puzzle))
-s = time.time()
-print("part 2:", part_2(data))
-print("elapsed time:", time.time() - s)
+
+gy, gx = find_guard(data)
+solved_puzzle[gy][gx] = data[gy][gx]
+print("part 2:", part_2(solved_puzzle))
