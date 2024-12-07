@@ -8,14 +8,16 @@ from aocd import get_data
 data = get_data(day=7, year=2024).splitlines()
 
 
-def lr_eval(math: str) -> int:
-    tokens = re.split(r'(\+|\*|\|\|)', math)
-    # print(f"{tokens=}")
-    if len(tokens) < 3:
-        return eval(math)
-    if tokens[1] == "||":
-        return lr_eval(tokens[0]+tokens[2] + "".join(tokens[3:]))
-    return lr_eval(str(eval("".join(tokens[:3]))) + "".join(tokens[3:]))
+def lr_eval(result: int, math: str):
+    math = re.split(r'(\+|\*|\|\|)', math)
+    for i in range(1, len(math), 2):
+        if math[i] == "+":
+            math[i+1] = str(int(math[i-1]) + int(math[i+1]))
+        if math[i] == "*":
+            math[i+1] = str(int(math[i-1]) * int(math[i+1]))
+        if math[i] == "||":
+            math[i+1] = math[i-1] + math[i+1]
+    return int(math[-1]) == result
 
 
 def part_1(puzzle_data: List[str], chars: tuple = ("+", "*")):
@@ -25,11 +27,11 @@ def part_1(puzzle_data: List[str], chars: tuple = ("+", "*")):
         result, numbers = int(result), numbers.split(" ")
         prod_list = list(product(chars, repeat=len(numbers)-1))
         for prod in prod_list:
-            if lr_eval("".join(a+b for a, b in zip(numbers, prod)) + numbers[-1]) == result:
+            if lr_eval(result, "".join(a+b for a, b in zip(numbers, prod)) + numbers[-1]):
                 out += result
                 break
     return out
         
         
-print("part 1:", part_1(data)) # 3749
+print("part 1:", part_1(data))
 print("part 2:", part_1(data, chars=("+", "*", "||")))
