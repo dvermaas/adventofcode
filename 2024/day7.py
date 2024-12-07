@@ -7,25 +7,26 @@ from aocd import get_data
 data = get_data(day=7, year=2024).splitlines()
 
 
-def lr_eval(result: int, math: List[str]):
-    for i in range(1, len(math), 2):
-        if math[i] == "+":
-            math[i+1] = str(int(math[i-1]) + int(math[i+1]))
-        if math[i] == "*":
-            math[i+1] = str(int(math[i-1]) * int(math[i+1]))
-        if math[i] == "||":
-            math[i+1] = math[i-1] + math[i+1]
-    return int(math[-1]) == result
+def lr_eval(result: int, numbers: List[int], operators: List[str]):
+    out = numbers[0]
+    for i, operator in enumerate(operators):
+        if operator == "+":
+            out += numbers[i+1]
+        elif operator == "*":
+            out *= numbers[i+1]
+        elif operator == "||":
+            out = int(str(out) + str(numbers[i+1]))
+    return out == result
 
 
 def part_1(puzzle_data: List[str], chars: tuple = ("+", "*")):
     out = 0
     for line in tqdm(puzzle_data):
         result, numbers = line.split(": ")
-        result, numbers = int(result), numbers.split(" ")
-        prod_list = list(product(chars, repeat=len(numbers)-1))
-        for prod in prod_list:
-            if lr_eval(result, [item for pair in zip(numbers, prod) for item in pair] + [numbers[-1]]):
+        result, numbers = int(result), list(map(int, numbers.split(" ")))
+        operators_list = list(product(chars, repeat=len(numbers)-1))
+        for operators in operators_list:
+            if lr_eval(result, numbers, operators):
                 out += result
                 break
     return out
