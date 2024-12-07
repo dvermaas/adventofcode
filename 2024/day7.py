@@ -1,4 +1,3 @@
-import re
 from typing import List
 from itertools import product
 from tqdm import tqdm
@@ -8,8 +7,7 @@ from aocd import get_data
 data = get_data(day=7, year=2024).splitlines()
 
 
-def lr_eval(result: int, math: str):
-    math = re.split(r'(\+|\*|\|\|)', math)
+def lr_eval(result: int, math: List[str]):
     for i in range(1, len(math), 2):
         if math[i] == "+":
             math[i+1] = str(int(math[i-1]) + int(math[i+1]))
@@ -27,7 +25,7 @@ def part_1(puzzle_data: List[str], chars: tuple = ("+", "*")):
         result, numbers = int(result), numbers.split(" ")
         prod_list = list(product(chars, repeat=len(numbers)-1))
         for prod in prod_list:
-            if lr_eval(result, "".join(a+b for a, b in zip(numbers, prod)) + numbers[-1]):
+            if lr_eval(result, [item for pair in zip(numbers, prod) for item in pair] + [numbers[-1]]):
                 out += result
                 break
     return out
